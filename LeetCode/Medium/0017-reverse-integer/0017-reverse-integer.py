@@ -9,5 +9,6 @@ class Solution:
         else:
             answer = -int(str(x)[1:][::-1])
 
-        if -2**31 > answer or 2**31-1 < answer or 
+        if -2**31 > answer or 2**31-1 < answer :
+            return 0
         return answer
