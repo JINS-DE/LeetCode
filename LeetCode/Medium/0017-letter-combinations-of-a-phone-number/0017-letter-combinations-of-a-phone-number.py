@@ -15,13 +15,19 @@ class Solution:
                 for _ in range(4):
                     hash[i].append(chr(asc))
                     asc+=1
-        
-        def backtrack(index, combi):
-            if index == len(digits):    
-                answer.append(combi)
-                return
-            for i in hash[int(digits[index])]:
-                backtrack(index+1,combi+i)
-        backtrack(0,'')
-        return answer
+        n = len(digits)
+        def backtrack(index,st):
+            if index >= n:
+                answer.append(st)
+                return 
 
+            alpa_li = hash[int(digits[index])]
+            
+            for c in alpa_li:
+                st+=c
+                backtrack(index+1,st)
+                st = st[:len(st)-1]
+        backtrack(0,"")
+        
+
+        return answer
