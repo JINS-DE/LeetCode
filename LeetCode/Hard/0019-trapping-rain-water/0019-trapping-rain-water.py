@@ -1,35 +1,55 @@
+"""
+# 투포인터 풀이
+완전 탐색 풀이에서 착안, 
+어찌됐든 현재 물 높이는 왼쪽에서 가장 높은 물 높이, 오른쪽에서 가장 높은 물높이 중에
+고인 물의 양은 가장 낮은 물높이 - 현재 물높이이다.
 
+height[left] < height[right] 이면 왼쪽의 높이만 생각하면된다. 
+height[left] >= height[right] 이면 오른쪽의 높이만 생각하면 된다. 
+
+변수 정의
+left, right = 0, n-1
+left_max, right_max = 0,0
+answer = 0
+
+------
+# STACK 풀이
+stack에는 index가 저장
+
+1. 트리거 작동: 물 높이가 높아질 때 
+- height[stack[-1]] < now_height 
+- bottom = stack.pop() # 현재 바닥 높이
+
+2. 왼쪽 벽 찾기 : 
+left_wall = stack[-1] 
+
+물 웅덩이의 높이 : h = min(now_height,height[left_wall])-height[bottom]
+웅덩이의 가로 길이 : w = i-left_wall-1
+
+# 브루스 포스 (시간초과)
+for i in range(n):
+    left_max = max(height[:i+1])
+    right_max = max(height[i:])
+    total+=min(left_max,right_max)-height[i]
 """
-# 현재 물의 높이 계산 법 : 
-min_top = 나의 왼쪽에서 가장 높은 것탑과 나의 오른쪽에서 가장 높은 탑 중 낮은 탑을 고른다.
-현재 나의 물높이 = min_top - 나의 높이
-"""
+
 class Solution:
     def trap(self, height: List[int]) -> int:
-        n = len(height)
-        total = 0
-
-        # 브루스 포스 (시간초과)
-        # for i in range(n):
-        #     left_max = max(height[:i+1])
-        #     right_max = max(height[i:])
-        #     total+=min(left_max,right_max)-height[i]
-
-        # 스택
-        stack = []
-        total = 0
-
-        for i, h in enumerate(height):
-            while stack and h > height[stack[-1]]:
-                bottom = stack.pop()
-
-                if not stack: # 왼쪽 벽이 없는 경우
-                    break
-                left = stack[-1]
-
-                water_width = i-left-1
-                water_height = min(h,height[left])- height[bottom]
-                total += water_width*water_height
-            stack.append(i)
-            
-        return total
+        n=len(height)
+        left, right = 0, n-1
+        left_max, right_max = 0,0
+        answer = 0
+        while left<right:
+            if height[left] < height[right]:
+                if height[left] > left_max:
+                    left_max = height[left]
+                else:
+                    answer+=left_max-height[left]
+                left+=1
+            else:
+                if height[right] > right_max:
+                    right_max = height[right]
+                else:
+                    answer+=right_max-height[right]
+                right-=1
+        return answer
