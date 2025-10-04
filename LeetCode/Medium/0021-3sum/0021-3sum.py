@@ -14,6 +14,7 @@ class Solution:
                     right-=1
                 else:
                     sets.add((nums[left],nums[pivot],nums[right]))
-                    break
+                    left+=1
+                    right-=1
         
         return list(map(list,sets))
