@@ -5,21 +5,23 @@ class Solution:
         for x,y in prerequisites:
             adj[x].append(y)
         
+        visiting=set()
         visited=set()
         
         def dfs(course):
-            if course in visited:
+            if course in visiting:
                 return False
             
-            if adj[course] == []:
+            if course in visited:
                 return True
 
-            visited.add(course)
+            visiting.add(course)
             for next in adj[course]:
                 if not dfs(next):
                     return False
-            visited.remove(course)
-            adj[course] = [] 
+            visiting.remove(course)
+            visited.add(course)
+            
             return True
 
         for course in range(numCourses):
