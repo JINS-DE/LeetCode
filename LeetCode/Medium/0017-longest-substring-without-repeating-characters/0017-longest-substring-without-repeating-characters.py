@@ -1,23 +1,25 @@
 """
-slide window 방식 
-- 준비물 : left, right 포인터 / set , answer
-- s[right] set에 없으면 right만 +1 및 answer 값 갱신, 있으면 left+1, right+1
+슬라이딩 윈도우 방식
+- 투포인터 left, right
+- s[right] 중복체크 -> set()
+    - 중복이 없으면 set에 추가 및 right+1
+    - 중복이 있으면 left+1, left의 set 원소 제거
 """
 
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        set_ = set()
-        answer=0
-        left,right = 0,0
-        while right<len(s):
-            if s[right] not in set_:
-                set_.add(s[right])
+        s_size = len(s)
+        left,right=0,0
+        answer = 0 
+        valid_check = set()
+
+        while right < s_size:
+            if s[right] not in valid_check:
+                valid_check.add(s[right])
                 answer=max(answer,right-left+1)
                 right+=1
             else:
-                set_.remove(s[left])
+                valid_check.remove(s[left])
                 left+=1
-
-        return answer
-            
         
+        return answer
