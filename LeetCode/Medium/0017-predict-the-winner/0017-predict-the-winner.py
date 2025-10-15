@@ -1,13 +1,17 @@
 class Solution:
     def predictTheWinner(self, nums: List[int]) -> bool:
         n=len(nums)
-        def solve(left,right):
-            if left==right:
-                return nums[left]
-            
-            pick_left = nums[left]-solve(left+1,right)
-            pick_right = nums[right]-solve(left,right-1)
+        dp=[[0]*n for _ in range(n)]
 
-            return max(pick_left,pick_right)
+        # 길이가 1인 구간의 최대값은 자기 자신
+        for i in range(n):
+            dp[i][i]=nums[i]
         
-        return solve(0,n-1) >= 0
+        for length in range(2,n+1):
+            for left in range(n+1-length):
+                right = left+length-1
+                left_pick = nums[left] - dp[left+1][right]
+                right_pick = nums[right] - dp[left][right-1]
+                dp[left][right] = max(left_pick,right_pick)
+        
+        return dp[0][n-1] >= 0
